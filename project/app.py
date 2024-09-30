@@ -16,9 +16,14 @@ app.config.from_object(__name__)
 # connect to database
 def connect_db():
     """Connects to the database."""
-    rv = sqlite3.connect(app.config["DATABASE"])
-    rv.row_factory = sqlite3.Row
-    return rv
+    try:
+        rv = sqlite3.connect(app.config["DATABASE"])
+        rv.row_factory = sqlite3.Row
+        print(f"Connected to database: {app.config['DATABASE']}")  # Log success message
+        return rv
+    except sqlite3.Error as e:
+        print(f"Error connecting to database: {e}")  # Log the error message
+        return None 
 
 
 # create the database
@@ -33,9 +38,7 @@ def init_db():
 # open database connection
 def get_db():
     if not hasattr(g, "sqlite_db"):
-        print(1)
         g.sqlite_db = connect_db()
-        print(2)
     return g.sqlite_db
 
 
