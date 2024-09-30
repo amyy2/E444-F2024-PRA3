@@ -16,14 +16,9 @@ app.config.from_object(__name__)
 # connect to database
 def connect_db():
     """Connects to the database."""
-    try:
-        rv = sqlite3.connect(app.config["DATABASE"])
-        rv.row_factory = sqlite3.Row
-        print(f"Connected to database: {app.config['DATABASE']}")  # Log success message
-        return rv
-    except sqlite3.Error as e:
-        print(f"Error connecting to database: {e}")  # Log the error message
-        return None 
+    rv = sqlite3.connect(app.config["DATABASE"])
+    rv.row_factory = sqlite3.Row
+    return rv
 
 
 # create the database
