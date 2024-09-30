@@ -33,7 +33,9 @@ def init_db():
 # open database connection
 def get_db():
     if not hasattr(g, "sqlite_db"):
+        print(1)
         g.sqlite_db = connect_db()
+        print(2)
     return g.sqlite_db
 
 
