@@ -5,7 +5,16 @@ TDD and deploying web applications
 Start virtual environment:
 ```
 python3 -m venv env
+```
+
+Linux/MacOS:
+```
 source env/bin/activate
+```
+
+Windows:
+```
+env\Scripts\activate
 ```
 
 Install requirements:
