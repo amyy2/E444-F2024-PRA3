@@ -32,6 +32,7 @@ Windows:
 ```
 flask --app project/app run
 ```
+
 ### Run tests:
 ```
 python -m pytest
