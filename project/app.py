@@ -63,7 +63,7 @@ def index():
     """Searches the database for entries, then displays them."""
     
     if not database_exists(SQLALCHEMY_DATABASE_URI):
-        create_db.create_db()
+        create_db()
 
     entries = db.session.query(Post)
     return render_template('index.html', entries=entries)
