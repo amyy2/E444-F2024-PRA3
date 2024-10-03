@@ -81,3 +81,32 @@ def test_delete_message(client):
     rv = client.get('/delete/1')
     data = json.loads(rv.data)
     assert data["status"] == 1
+
+def test_search(client):
+    """Ensure messages are being returned from search"""
+
+    login(client, app.config["USERNAME"], app.config["PASSWORD"])
+
+    # Create some messages
+    rv = client.post(
+        "/add",
+        data=dict(title="A", text="First"),
+        follow_redirects=True,
+    )
+    rv = client.post(
+        "/add",
+        data=dict(title="B", text="Second"),
+        follow_redirects=True,
+    )
+
+    # Check if messages were added
+    assert b"No entries here so far" not in rv.data
+    assert b"A" in rv.data
+    assert b"First" in rv.data
+    assert b"B" in rv.data
+    assert b"Second" in rv.data
+
+    # Check search results for query 'A' (first message should return, second should not)
+    rv = client.get('/search/?query=A')
+    assert b"First" in rv.data
+    assert b"Second" not in rv.data
