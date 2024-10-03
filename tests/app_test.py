@@ -1,4 +1,3 @@
-import os
 import pytest
 from pathlib import Path
 import json
@@ -76,6 +75,7 @@ def test_messages(client):
     assert b"&lt;Hello&gt;" in rv.data
     assert b"<strong>HTML</strong> allowed here" in rv.data
 
+
 def test_delete_message(client):
     """Ensure the messages are being deleted"""
     rv = client.get("/delete/1")
@@ -86,12 +86,14 @@ def test_delete_message(client):
     data = json.loads(rv.data)
     assert data["status"] == 1
 
+
 def test_logged_out_delete(client):
     """Ensure messages can only be deleted while logged in"""
     logout(client)
-    rv = client.get('/delete/1')
+    rv = client.get("/delete/1")
     data = json.loads(rv.data)
     assert data["status"] == 0
+
 
 def test_search(client):
     """Ensure messages are being returned from search"""
@@ -118,6 +120,6 @@ def test_search(client):
     assert b"Second" in rv.data
 
     # Check search results for query 'A' (first message should return, second should not)
-    rv = client.get('/search/?query=A')
+    rv = client.get("/search/?query=A")
     assert b"First" in rv.data
     assert b"Second" not in rv.data

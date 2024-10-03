@@ -2,7 +2,7 @@ from project.app import app, db
 
 
 def create_db():
-    
+
     with app.app_context():
         # create the database and the db table
         db.create_all()
