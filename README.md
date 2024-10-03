@@ -2,7 +2,7 @@
 
 TDD and deploying web applications
 
-Start virtual environment:
+### Start virtual environment:
 ```
 python3 -m venv env
 ```
@@ -17,17 +17,22 @@ Windows:
 env\Scripts\activate
 ```
 
-Install requirements:
+### Install requirements:
 ```
 pip install -r requirements.txt
 ```
 
-Run Flask app:
+### Run Flask app:
+Linux/MacOS:
 ```
 FLASK_APP=project/app.py python -m flask run -p 5001
 ```
 
-Run tests:
+Windows:
+```
+flask --app project/app run
+```
+### Run tests:
 ```
 python -m pytest
 ```
