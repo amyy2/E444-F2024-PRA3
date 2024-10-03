@@ -6,6 +6,8 @@ from flask import Flask, g, render_template, request, session, \
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import database_exists
 
+from functools import wraps
+
 
 basedir = Path(__file__).resolve().parent
 
@@ -26,18 +28,16 @@ app.config.from_object(__name__)
 db = SQLAlchemy(app)
 
 from project import models
-import create_db
 
 
-@app.route('/')
-def index():
-    """Searches the database for entries, then displays them."""
-    
-    if database_exists(SQLALCHEMY_DATABASE_URI):
-        create_db.create_db()
-
-    entries = db.session.query(models.Post)
-    return render_template('index.html', entries=entries)
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            flash('Please log in.')
+            return jsonify({'status': 0, 'message': 'Please log in.'}), 401
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @app.route('/add', methods=['POST'])
@@ -99,6 +99,20 @@ def search():
     if query:
         return render_template('search.html', entries=entries, query=query)
     return render_template('search.html')
+
+
+import create_db
+
+@app.route('/')
+def index():
+    """Searches the database for entries, then displays them."""
+    
+    if not database_exists(SQLALCHEMY_DATABASE_URI):
+        create_db.create_db()
+
+    entries = db.session.query(models.Post)
+    return render_template('index.html', entries=entries)
+
 
 if __name__ == "__main__":
     app.run()
