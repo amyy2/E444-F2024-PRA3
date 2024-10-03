@@ -4,6 +4,7 @@ from pathlib import Path
 from flask import Flask, g, render_template, request, session, \
                   flash, redirect, url_for, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy_utils import database_exists
 
 
 basedir = Path(__file__).resolve().parent
@@ -25,11 +26,16 @@ app.config.from_object(__name__)
 db = SQLAlchemy(app)
 
 from project import models
+import create_db
 
 
 @app.route('/')
 def index():
     """Searches the database for entries, then displays them."""
+    
+    if database_exists(SQLALCHEMY_DATABASE_URI):
+        create_db.create_db()
+
     entries = db.session.query(models.Post)
     return render_template('index.html', entries=entries)
 
