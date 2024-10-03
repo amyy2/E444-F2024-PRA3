@@ -1,12 +1,8 @@
-import sqlite3 
 import os
 from pathlib import Path
-
-from flask import Flask, g, render_template, request, session, \
-                  flash, redirect, url_for, abort, jsonify
+from flask import Flask, render_template, request, session, flash, redirect, url_for, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import database_exists
-
 from functools import wraps
 
 
@@ -24,14 +20,15 @@ if url.startswith("postgres://"):
     url = url.replace("postgres://", "postgresql://", 1)
 
 SQLALCHEMY_DATABASE_URI = url
-#SQLALCHEMY_DATABASE_URI = f'sqlite:///{Path(basedir).joinpath(DATABASE)}'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 # create and initialize a new Flask app
 app = Flask(__name__)
+
 # load the config
 app.config.from_object(__name__)
+
 # init sqlalchemy
 db = SQLAlchemy(app)
 
@@ -70,9 +67,10 @@ def login_required(f):
 def index():
     """Searches the database for entries, then displays them."""
     
-    if not database_exists(SQLALCHEMY_DATABASE_URI):
+    try:
         create_db()
-
+    except:
+        pass
     entries = db.session.query(Post)
     return render_template('index.html', entries=entries)
 
