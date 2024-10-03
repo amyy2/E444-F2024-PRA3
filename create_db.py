@@ -8,3 +8,5 @@ def create_db():
 
         # commit the changes
         db.session.commit()
+
+create_db()

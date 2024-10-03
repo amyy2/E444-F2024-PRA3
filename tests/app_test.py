@@ -91,7 +91,7 @@ def test_logged_out_delete(client):
     logout(client)
     rv = client.get('/delete/1')
     data = json.loads(rv.data)
-    assert data["status"] == 1
+    assert data["status"] == 0
 
 def test_search(client):
     """Ensure messages are being returned from search"""

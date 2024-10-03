@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 gunicorn
 pytest
 sqlalchemy_utils
+psycopg2
